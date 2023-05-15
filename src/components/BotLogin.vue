@@ -42,7 +42,7 @@
           id="username-input"
           v-model="auth.username"
           required
-          placeholder="Freqtrader"
+          placeholder="Stakemint Trader"
           :state="nameState === '' ? null : nameState"
           @keydown.enter="handleOk"
         ></b-form-input>
@@ -69,7 +69,7 @@
           <span v-if="errorMessageCORS">
             Please also check your bot's CORS configuration:
             <a href="https://www.freqtrade.io/en/latest/rest-api/#cors"
-              >Freqtrade CORS documentation</a
+              >CORS documentation</a
             ></span
           >
         </b-alert>

@@ -94,7 +94,7 @@ const handleStopBot = () => {
 const handleStopBuy = () => {
   const msg: MsgBoxObject = {
     title: 'Stop Buying',
-    message: 'Freqtrade will continue to handle open trades.',
+    message: 'Stakemint will continue to handle open trades.',
     accept: () => {
       botStore.activeBot.stopBuy();
     },
