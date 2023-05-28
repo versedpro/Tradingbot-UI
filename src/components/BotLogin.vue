@@ -68,10 +68,10 @@
           <br />
           <span v-if="errorMessageCORS">
             Please also check your bot's CORS configuration:
-            <a href="https://www.freqtrade.io/en/latest/rest-api/#cors"
-              >CORS documentation</a
-            ></span
-          >
+            <a href="https://www.freqtrade.io/en/latest/rest-api/#cors">
+              CORS documentation
+            </a>
+          </span>
         </b-alert>
       </div>
       <div v-if="inModal === false" class="float-end">
