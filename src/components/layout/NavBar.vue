@@ -1,9 +1,9 @@
 <template>
   <header>
-    <b-navbar toggleable="sm" dark variant="primary">
+    <b-navbar toggleable="sm" dark variant="success">
       <router-link class="navbar-brand" exact to="/">
-        <img class="logo" src="@/assets/freqtrade-logo.png" alt="Home Logo" />
-        <span class="navbar-brand-title d-sm-none d-md-inline">Trading Bot UI</span>
+        <img class="logo" src="@/assets/invesableai-logo.png" alt="Home Logo" />
+        <span class="navbar-brand-title d-sm-none d-md-inline">INVESABLEAI Bot</span>
       </router-link>
 
       <!-- TODO: For XS breakpoint, this should be here...  -->
@@ -178,7 +178,7 @@ const resetDynamicLayout = (): void => {
   }
 };
 const setTitle = () => {
-  let title = 'freqUI';
+  let title = 'InvesableAI BOT';
   if (settingsStore.openTradesInTitle === OpenTradeVizOptions.asTitle) {
     title = `(${botStore.activeBotorUndefined?.openTradeCount}) ${title}`;
   }

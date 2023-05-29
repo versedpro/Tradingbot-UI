@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <b-card header="Trading bot Login">
+    <b-card header="INVESABLEAI Login">
       <BotLogin ref="loginForm" />
     </b-card>
   </div>
