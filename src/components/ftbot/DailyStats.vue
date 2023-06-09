@@ -12,6 +12,11 @@
         :daily-stats="botStore.activeBot.dailyStatsSorted"
       />
     </div>
+    <div class="mb-2">
+        <b-button class="float-end" size="sm" @click="excelParser().exportDataFromJSON(botStore.activeBot.dailyStats.data, 'report', 'xls')">
+          <i-mdi-export />
+        </b-button>
+      </div>
     <div>
       <b-table class="table-sm" :items="botStore.activeBot.dailyStats.data" :fields="dailyFields">
       </b-table>
@@ -25,6 +30,24 @@ import DailyChart from '@/components/charts/DailyChart.vue';
 import { formatPercent } from '@/shared/formatters';
 import { useBotStore } from '@/stores/ftbotwrapper';
 import { TableField } from 'bootstrap-vue-next';
+import exportFromJSON from 'export-from-json';
+
+const excelParser = () => {
+  function exportDataFromJSON(data: any, newFileName: any, fileExportType: any) {
+    if (!data) return;
+    try {
+      const fileName = newFileName || "exported-data";
+      const exportType = exportFromJSON.types[fileExportType || "xls"];
+      exportFromJSON({ data, fileName, exportType });
+    } catch (e) {
+      throw new Error("Parsing failed!");
+    }
+  }
+
+  return {
+    exportDataFromJSON
+  };
+};
 
 const botStore = useBotStore();
 const dailyFields = computed<TableField[]>(() => {

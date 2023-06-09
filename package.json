@@ -27,6 +27,7 @@
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "echarts": "^5.4.2",
+    "export-from-json": "^1.7.2",
     "favico.js": "^0.3.10",
     "humanize-duration": "^3.28.0",
     "pinia": "^2.0.36",
