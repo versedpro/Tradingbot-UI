@@ -35,6 +35,14 @@ import {
   TradeResponse,
   ClosedTrade,
   BotDescriptor,
+  BgTaskStarted,
+  BackgroundTaskStatus,
+  Exchange,
+  ExchangeListResult,
+  FreqAIModelListResult,
+  PairlistEvalResponse,
+  PairlistsPayload,
+  PairlistsResponse,
 } from '@/types';
 import axios, { AxiosResponse } from 'axios';
 import { defineStore } from 'pinia';
@@ -42,7 +50,6 @@ import { showAlert } from './alerts';
 import { useWebSocket } from '@vueuse/core';
 import { FTWsMessage, FtWsMessageTypes } from '@/types/wsMessageTypes';
 import { showNotification } from '@/shared/notifications';
-import { FreqAIModelListResult } from '../types/types';
 
 export function createBotSubStore(botId: string, botName: string) {
   const userService = useUserService(botId);
@@ -84,6 +91,7 @@ export function createBotSubStore(botId: string, botName: string) {
         strategyPlotConfig: undefined as PlotConfig | undefined,
         strategyList: [] as string[],
         freqaiModelList: [] as string[],
+        exchangeList: [] as Exchange[],
         strategy: {} as StrategyResult,
         pairlist: [] as string[],
         currentLocks: undefined as LockResponse | undefined,
@@ -441,6 +449,16 @@ export function createBotSubStore(botId: string, botName: string) {
           return Promise.reject(error);
         }
       },
+      async getExchangeList() {
+        try {
+          const { data } = await api.get<ExchangeListResult>('/exchanges');
+          this.exchangeList = data.exchanges;
+          return Promise.resolve(data.exchanges);
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
+        }
+      },
       async getAvailablePairs(payload: AvailablePairPayload) {
         try {
           const { data } = await api.get<AvailablePairResult>('/available_pairs', {
@@ -529,6 +547,45 @@ export function createBotSubStore(botId: string, botName: string) {
         try {
           const { data } = await api.get('/logs');
           this.lastLogs = data.logs;
+          return Promise.resolve(data);
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
+        }
+      },
+      async getPairlists() {
+        try {
+          const { data } = await api.get<PairlistsResponse>('/pairlists/available');
+          return Promise.resolve(data);
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
+        }
+      },
+      async evaluatePairlist(payload: PairlistsPayload) {
+        try {
+          const { data } = await api.post<PairlistsPayload, AxiosResponse<BgTaskStarted>>(
+            '/pairlists/evaluate',
+            payload,
+          );
+          return Promise.resolve(data);
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
+        }
+      },
+      async getPairlistEvalResult(jobId: string) {
+        try {
+          const { data } = await api.get<PairlistEvalResponse>(`/pairlists/evaluate/${jobId}`);
+          return Promise.resolve(data);
+        } catch (error) {
+          console.error(error);
+          return Promise.reject(error);
+        }
+      },
+      async getBackgroundJobStatus(jobId: string) {
+        try {
+          const { data } = await api.get<BackgroundTaskStatus>(`/background/${jobId}`);
           return Promise.resolve(data);
         } catch (error) {
           console.error(error);
@@ -628,6 +685,18 @@ export function createBotSubStore(botId: string, botName: string) {
             console.error(error.response);
           }
           showAlert(`Failed to cancel open order ${tradeid}`, 'danger');
+          return Promise.reject(error);
+        }
+      },
+      async reloadTrade(tradeid: string) {
+        try {
+          const res = await api.post<never, AxiosResponse<Trade>>(`/trades/${tradeid}/reload`);
+          return Promise.resolve(res);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.error(error.response);
+          }
+          showAlert(`Failed to reload trade ${tradeid}`, 'danger');
           return Promise.reject(error);
         }
       },

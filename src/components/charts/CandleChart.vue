@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { generateAreaCandleSeries, generateCandleSeries } from '@/shared/charts/candleChartSeries';
 import heikinashi from '@/shared/charts/heikinashi';
-import { getTradeEntries } from '@/shared/charts/tradeChartData';
+import { generateTradeSeries } from '@/shared/charts/tradeChartData';
 import {
   ChartSliderPosition,
   ChartType,
@@ -383,9 +383,7 @@ function updateChart(initial = false) {
       if (Array.isArray(chartOptions.value.xAxis) && chartOptions.value.xAxis.length <= plotIndex) {
         chartOptions.value.xAxis.push({
           type: 'time',
-          scale: true,
           gridIndex: currGridIdx,
-          boundaryGap: false,
           axisLine: { onZero: false },
           axisTick: { show: false },
           axisLabel: { show: false },
@@ -458,41 +456,17 @@ function updateChart(initial = false) {
     chartOptions.value.grid[chartOptions.value.grid.length - 1].bottom = '50px';
     delete chartOptions.value.grid[chartOptions.value.grid.length - 1].top;
   }
-  const { tradeData } = getTradeEntries(props.dataset, filteredTrades.value);
 
   const nameTrades = 'Trades';
   if (!Array.isArray(chartOptions.value.legend) && chartOptions.value.legend?.data) {
     chartOptions.value.legend.data.push(nameTrades);
   }
-  const tradesSeries: ScatterSeriesOption = {
-    name: nameTrades,
-    type: 'scatter',
-    xAxisIndex: 0,
-    yAxisIndex: 0,
-    encode: {
-      x: 0,
-      y: 1,
-      label: 5,
-      tooltip: 6,
-    },
-    label: {
-      show: true,
-      fontSize: 12,
-      backgroundColor: props.theme !== 'dark' ? '#fff' : '#000',
-      padding: 2,
-      color: props.theme === 'dark' ? '#fff' : '#000',
-    },
-    labelLayout: { rotate: 75, align: 'left', dx: 10 },
-    itemStyle: {
-      // color: tradeSellColor,
-      color: (v) => v.data[4],
-      opacity: 0.9,
-    },
-    symbol: (v) => v[2],
-    symbolRotate: (v) => v[3],
-    symbolSize: 13,
-    data: tradeData,
-  };
+  const tradesSeries: ScatterSeriesOption = generateTradeSeries(
+    nameTrades,
+    props.theme,
+    props.dataset,
+    filteredTrades.value,
+  );
   if (Array.isArray(chartOptions.value.series)) {
     chartOptions.value.series.push(tradesSeries);
   }
@@ -559,8 +533,6 @@ function initializeChartOptions() {
     xAxis: [
       {
         type: 'time',
-        scale: true,
-        boundaryGap: false,
         axisLine: { onZero: false },
         axisTick: { show: true },
         axisLabel: { show: true },
@@ -576,8 +548,6 @@ function initializeChartOptions() {
       {
         type: 'time',
         gridIndex: 1,
-        scale: true,
-        boundaryGap: false,
         axisLine: { onZero: false },
         axisTick: { show: false },
         axisLabel: { show: false },
