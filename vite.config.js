@@ -43,7 +43,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://stakeminttradingbot1.tail135b9.ts.net',
+        target: 'https://invesable.tail135b9.ts.net/',
         changeOrigin: true,
       },
     },
