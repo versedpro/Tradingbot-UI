@@ -187,7 +187,7 @@ const resetDynamicLayout = (): void => {
   }
 };
 const setTitle = () => {
-  let title = 'iNVESABLEAI BOT';
+  let title = 'INVESABLEAI BOT';
   if (settingsStore.openTradesInTitle === OpenTradeVizOptions.asTitle) {
     title = `(${botStore.activeBotorUndefined?.openTradeCount}) ${title}`;
   }
