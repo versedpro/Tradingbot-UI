@@ -1,7 +1,7 @@
 <template>
   <div v-if="botStore.activeBot.botState">
     <p>
-      Running InvesableAI bot <strong>{{ botStore.activeBot.version }}</strong>
+      Running INVESABLEAI bot <strong>{{ botStore.activeBot.version }}</strong>
     </p>
     <p>
       Running with
