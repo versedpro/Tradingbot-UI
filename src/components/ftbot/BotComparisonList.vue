@@ -27,12 +27,17 @@
       />
     </template>
     <template #cell(profitClosed)="row">
-      <profit-pill
+      <!-- <profit-pill
         v-if="row.item.profitClosed && row.item.botId != 'Summary'"
         :profit-ratio="row.item.profitClosedRatio"
         :profit-abs="row.item.profitClosed"
         :stake-currency="row.item.stakeCurrency"
-      />
+      /> -->
+      <profit-pill
+          v-if="row.item.profitClosed && row.item.botId != 'Summary'"
+          :profit-abs="row.item.profitClosed"
+          :stake-currency="row.item.stakeCurrency"
+        />
     </template>
 
     <template #cell(balance)="row">
